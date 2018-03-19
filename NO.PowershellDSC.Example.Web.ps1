@@ -1,3 +1,4 @@
+#region Functions
 function Start-DSCDeploy($target) {
 
     $cso = New-CimSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck -UseSsl
@@ -18,7 +19,8 @@ function Start-DSCDeploy($target) {
         }
     }
 }
-
+#endregion Functions
+#region Configurations
 Configuration NO.PowershellDSC.Example.Web
 {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -159,7 +161,7 @@ Configuration NO.PowershellDSC.Example.Web
         }
     }
 }
-
+#endregion Configurations
 # Create MOFs
 NO.PowershellDSC.Example.Web -ConfigurationData .\ConfigData.psd1 -Verbose
 
