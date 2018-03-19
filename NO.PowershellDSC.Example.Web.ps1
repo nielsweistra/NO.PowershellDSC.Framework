@@ -163,7 +163,7 @@ Configuration NO.PowershellDSC.Example.Web
 # Create MOFs
 NO.PowershellDSC.Example.Web -ConfigurationData .\ConfigData.psd1 -Verbose
 
-# Retrive Webserver hosts from Configdata
+# Retrieve Webserver hosts from Configdata
 $Configdata = Import-PowerShellDataFile -Path .\ConfigData.psd1
 $webservers = $Configdata.Allnodes.Where({$_.Roles -contains 'Web'}).NodeName
 
