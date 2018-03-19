@@ -1,7 +1,7 @@
 param
     (
             [ValidateNotNullOrEmpty()]
-            [string] $DNSName = "dsc.nelsonline.nl",
+            [string] $DNSName = "dsc.yourdomain.tld",
 
             [ValidateNotNullOrEmpty()]
             [string] $NodeName = "localhost"
