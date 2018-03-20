@@ -8,7 +8,7 @@
 function Start-DSCDeploy($target) {
 
     $cso = New-CimSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck -UseSsl
-    $session = New-CimSession -Credential administrator -Port 5986 -SessionOption $cso -ComputerName $target 
+    $session = New-CimSession -Credential administrator -Port 5986 -SessionOption $cso -ComputerName $Target 
     $caption = "Confirm"
     $message = "Are you sure?"
     $yes = new-Object System.Management.Automation.Host.ChoiceDescription "&Yes","help"
