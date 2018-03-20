@@ -13,7 +13,7 @@ function Main {
     $publish = new-Object System.Management.Automation.Host.ChoiceDescription "&Publish","help"
     $abort = new-Object System.Management.Automation.Host.ChoiceDescription "&Abort","help"
     $choices = [System.Management.Automation.Host.ChoiceDescription[]]($deploy,$publish,$abort)
-    $answer = $host.ui.PromptForChoice($caption,$message,$choices,2)
+    $answer = $host.ui.PromptForChoice($caption,$message,$choices,3)
     
     switch ($answer){
         0 {
@@ -23,10 +23,12 @@ function Main {
             Start-DSCDeploy($webservers)
         }
         1 {
-            #Write-Host "Not implemented yet"; break
             Publish-Configs -ConfigPath ".\NO.PowershellDSC.Example.Web"
         }
         2 {
+            Publish-Modules
+        }
+        3 {
             "Exiting..."; break
         }
     }  
