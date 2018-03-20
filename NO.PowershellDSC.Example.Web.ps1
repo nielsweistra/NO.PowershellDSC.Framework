@@ -1,5 +1,5 @@
-#region 
-    #
+# region Include required files
+#
 $ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 try {
     . ("$ScriptDirectory\includes\fun.ps1")
@@ -10,15 +10,16 @@ catch {
 #endregion
 
 #region Functions
-
 function Main {
     $caption = "BEWARE!"
     $message = "Are your ready to Deploy(Push) or Publish(Pull) the configs? Otherwise press Abort"
+    $create = new-Object System.Management.Automation.Host.ChoiceDescription "&Create","help"
     $deploy = new-Object System.Management.Automation.Host.ChoiceDescription "&Deploy","help"
     $publish = new-Object System.Management.Automation.Host.ChoiceDescription "&Publish","help"
+    $publishmods = new-Object System.Management.Automation.Host.ChoiceDescription "Publish &Modules","help"
     $abort = new-Object System.Management.Automation.Host.ChoiceDescription "&Abort","help"
-    $choices = [System.Management.Automation.Host.ChoiceDescription[]]($deploy,$publish,$abort)
-    $answer = $host.ui.PromptForChoice($caption,$message,$choices,3)
+    $choices = [System.Management.Automation.Host.ChoiceDescription[]]($create,$deploy, $publish, $publishmods, $abort)
+    $answer = $host.ui.PromptForChoice($caption,$message,$choices,4)
     
     switch ($answer){
         0 {
@@ -34,6 +35,9 @@ function Main {
             Publish-Modules
         }
         3 {
+            Create-Configs
+        }
+        4 {
             "Exiting..."; break
         }
     }  
@@ -69,7 +73,6 @@ function Publish-Configs($ConfigPath, $ConfigPullPath) {
     $WebConfigPath = "$($ConfigPath)\*"
     Copy-Item -Path $WebConfigPath -Destination $PullConfigPath -Recurse
 }
-
 function Publish-Modules {
     Write-Host "Not implemented yet"; break
     
@@ -87,6 +90,11 @@ function Publish-Modules {
     $DestinationPath = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules\$($ModuleName)_$($Version).zip"
     Compress-Archive -Path $ModulePath -DestinationPath $DestinationPath
     New-DscChecksum -Path $DestinationPath
+}
+
+function Create-Configs {
+    # Create MOFs
+    NO.PowershellDSC.Example.Web -ConfigurationData .\ConfigData.psd1 -Verbose
 }
 #endregion Functions
 #region Configurations
@@ -231,8 +239,7 @@ Configuration NO.PowershellDSC.Example.Web
     }
 }
 #endregion Configurations
-# Create MOFs
-NO.PowershellDSC.Example.Web -ConfigurationData .\ConfigData.psd1 -Verbose
+
 
 # Start Main
 Main
