@@ -1,3 +1,9 @@
+#region 
+    #
+    # Mastering my Powershell skills and implementing Desired State Configuration
+    #
+#endregion
+
 #region Functions
 function Start-DSCDeploy($target) {
 
