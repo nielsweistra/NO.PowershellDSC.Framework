@@ -5,7 +5,33 @@
 #endregion
 
 #region Functions
-function Start-DSCDeploy($target) {
+
+function Main {
+    $caption = "BEWARE!"
+    $message = "Are your ready to Deploy(Push) or Publish(Pull) the configs? Otherwise press Abort"
+    $deploy = new-Object System.Management.Automation.Host.ChoiceDescription "&Deploy","help"
+    $publish = new-Object System.Management.Automation.Host.ChoiceDescription "&Publish","help"
+    $abort = new-Object System.Management.Automation.Host.ChoiceDescription "&Abort","help"
+    $choices = [System.Management.Automation.Host.ChoiceDescription[]]($deploy,$publish,$abort)
+    $answer = $host.ui.PromptForChoice($caption,$message,$choices,2)
+    
+    switch ($answer){
+        0 {
+            # Retrieve Webserver hosts from Configdata
+            $Configdata = Import-PowerShellDataFile -Path .\ConfigData.psd1
+            $webservers = $Configdata.Allnodes.Where({$_.Roles -contains 'Web'}).NodeName
+            Start-DSCDeploy($webservers)
+        }
+        1 {
+            #Write-Host "Not implemented yet"; break
+            Publish-Configs -ConfigPath ".\NO.PowershellDSC.Example.Web"
+        }
+        2 {
+            "Exiting..."; break
+        }
+    }  
+}
+function Start-DSCDeploy($Target) {
 
     $cso = New-CimSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck -UseSsl
     $session = New-CimSession -Credential administrator -Port 5986 -SessionOption $cso -ComputerName $Target 
