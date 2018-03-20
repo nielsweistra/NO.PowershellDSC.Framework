@@ -227,9 +227,5 @@ Configuration NO.PowershellDSC.Example.Web
 # Create MOFs
 NO.PowershellDSC.Example.Web -ConfigurationData .\ConfigData.psd1 -Verbose
 
-# Retrieve Webserver hosts from Configdata
-$Configdata = Import-PowerShellDataFile -Path .\ConfigData.psd1
-$webservers = $Configdata.Allnodes.Where({$_.Roles -contains 'Web'}).NodeName
-
-# Start deploy
-Start-DSCDeploy($webservers)
+# Start Main
+Main
