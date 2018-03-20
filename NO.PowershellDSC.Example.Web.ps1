@@ -1,7 +1,12 @@
 #region 
     #
-    # Mastering my Powershell skills and implementing Desired State Configuration
-    #
+$ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
+try {
+    . ("$ScriptDirectory\includes\fun.ps1")
+}
+catch {
+    Write-Host "Error while loading supporting PowerShell Scripts" 
+}
 #endregion
 
 #region Functions
