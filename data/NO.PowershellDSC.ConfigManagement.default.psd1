@@ -3,15 +3,17 @@
     @(
         @{
             NodeName = 'SRVWINTST02'
-            Roles = @('Web')
+            Roles = @('WebServer_Custom')
+            Description = 'Customized IIS Webserver'
             PSDscAllowDomainUser = $true
             PSDscAllowPlainTextPassword = $true
         },
         @{
-            NodeName = 'SRVWINTST01'
-            Roles = @('web')
+            NodeName = 'SRVWINTST03'
+            Roles = @('WebServer_Default')
+            Description = 'Basic IIS Webserver'
             PSDscAllowDomainUser = $true
             PSDscAllowPlainTextPassword = $true
-        }	
+        }
     )
 }
