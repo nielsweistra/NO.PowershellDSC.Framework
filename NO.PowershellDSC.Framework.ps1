@@ -47,8 +47,8 @@ function Console {
                 Write-Host "Error while loading Configurations" 
             }
             
-            $DefaultConfig = "NO.PowershellDSC.ConfigManagement"
-            $DefaultConfigData = ".\ConfigData.psd1"
+            $DefaultConfig = "NO.PowershellDSC.ConfigManagement.default"
+            $DefaultConfigData = ".\data\NO.PowershellDSC.ConfigManagement.default"
 
             $Config = Read-Host "What is the name of the configuration or enter for using the default [$($DefaultConfig)]" 
             if([string]::IsNullOrEmpty($Config))
