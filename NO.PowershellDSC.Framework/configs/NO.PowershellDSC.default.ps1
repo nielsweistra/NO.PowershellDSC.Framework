@@ -1,4 +1,4 @@
-Configuration NO.PowershellDSC.ConfigManagement.default
+Configuration NO.PowershellDSC.default
 {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Import-DscResource -ModuleName xWebAdministration
