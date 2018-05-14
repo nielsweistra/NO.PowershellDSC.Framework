@@ -1,4 +1,9 @@
+using module "..\internal\NO.PowershellDSC.Framework.ConfigurationManager.psm1"
+
 function Show-NPDConsole {
+[CmdletBinding()]
+param(
+)
     $DefaultConfigData = "$($PWD)\data\NO.PowershellDSC.ConfigManagement.default.psd1"
     $DefaultConfigDir = "$($PWD)\configs"
     $DefaultConfig = "NO.PowershellDSC.default"
@@ -69,7 +74,9 @@ function Show-NPDConsole {
             Publish-Modules
         }
         3 {         
-            New-Configs -Configuration $Config -ConfigurationData $ConfigData -Path $DefaultConfigDir
+            #New-Configs -Configuration $Config -ConfigurationData $ConfigData -Path $DefaultConfigDir
+            New-Configs -ConfigurationName $Config -ConfigurationData $ConfigData
+
             Show-NPDConsole
         }
         4 {
