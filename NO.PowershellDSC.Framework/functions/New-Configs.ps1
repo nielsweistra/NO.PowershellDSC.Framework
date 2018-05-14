@@ -1,14 +1,10 @@
-function New-Configs ($Configuration, $ConfigurationData, $ConfigPath) {
-    try {
-        Get-ConfigFiles -Path $DefaultConfigDir| ForEach-Object {
-            . $_.FullName
-            Write-Verbose "Configuration $($_.FullName) has been included"
-        }
-    }
-    catch {
-        Write-Host "Error while loading supporting PowerShell Scripts" 
-    }
+using module "..\internal\NO.PowershellDSC.Framework.ConfigurationManager.psm1"
 
-    $CreateMofs = "$($Configuration) -ConfigurationData $($ConfigurationData) -Verbose"
-    Invoke-Expression $CreateMofs
+function New-Configs {
+[CmdletBinding()]
+param($ConfigurationName, $ConfigurationData, $ConfigPath) 
+
+    $Configuration = [ConfigurationManager]::new($ConfigurationName, $ConfigurationData)
+    $Configuration.Create()
+
 }
