@@ -14,7 +14,7 @@ function Get-ConfigFiles {
                 Name     = $_.Name
                 FullName = $_.FullName    
             }    
-            Write-Verbose "Configuration $($_.FullName) has been included"
+            Write-Verbose "$($pscmdlet.MyInvocation.MyCommand.ToString()) : Configuration $($_.FullName) found!"
         }
     }
     catch {
