@@ -1,4 +1,19 @@
 function Show-NPDConsole {
+    $DefaultConfigData = "$($PWD)\data\NO.PowershellDSC.ConfigManagement.default.psd1"
+    $DefaultConfigDir = "$($PWD)\configs"
+    $DefaultConfig = "NO.PowershellDSC.default"
+
+    if (([string]::IsNullOrEmpty($config) -and ([string]::IsNullOrEmpty($ConfigData)))) {
+        $Config = Read-Host "What is the name of the configuration or enter for using the default [$($DefaultConfig)]" 
+        if ([string]::IsNullOrEmpty($Config)) {
+            $Config = $DefaultConfig
+        }
+        
+        $ConfigData = Read-Host "What is the name of the configuration data file or enter for using the default [$($DefaultConfigData)]" 
+        if ([string]::IsNullOrEmpty($ConfigData)) {
+            $ConfigData = $DefaultConfigData
+        }
+    }
     $caption = "BEWARE!"
     $message = "Are your ready to Deploy(Push) or Publish(Pull) the configs? Otherwise press Abort"
     $create = new-Object System.Management.Automation.Host.ChoiceDescription "&Create", "help"
@@ -8,10 +23,7 @@ function Show-NPDConsole {
     $abort = new-Object System.Management.Automation.Host.ChoiceDescription "&Abort", "help"
     $choices = [System.Management.Automation.Host.ChoiceDescription[]]($deploy, $publish, $publishmods, $create, $abort)
     $answer = $host.ui.PromptForChoice($caption, $message, $choices, 4)
-    $DefaultConfigData = "$($PWD)\data\NO.PowershellDSC.ConfigManagement.default.psd1"
-    $DefaultConfigDir = "$($PWD)\configs"
     
-
     switch ($answer) {
         0 {
             $caption = "Deploy"
@@ -25,25 +37,20 @@ function Show-NPDConsole {
                 
             switch ($answer) {
                 0 {
-                    $ConfigData = Read-Host "What is the name of the configuration data file or enter for using the default [$($DefaultConfigData)]" 
-                    if ([string]::IsNullOrEmpty($ConfigData)) {
-                        $ConfigData = $DefaultConfigData
-                    }
+                    
                     $Target = Import-PowerShellDataFile -Path $ConfigData 
                     Start-DSCDeploy($Target.Allnodes.NodeName)
                 }
                 1 {
                     Write-Host "Role"
-                    $DefaultTargetRole = "Web"
+                    $Configdata = Import-PowerShellDataFile -Path $ConfigData 
                     
-                    $ConfigData = Read-Host "What is the name of the configuration data file or enter for using the default [$($DefaultConfigData)]" 
-                    if ([string]::IsNullOrEmpty($ConfigData)) {
-                        $ConfigData = $DefaultConfigData
-                    }
+                    $DefaultTargetRole = "WebServer_Default"
 
+                    
                     $Target = Read-Host "What is the name of the Role you want to deploy or enter for using the default [$($DefaultTargetRole)]" 
-                    if ([string]::IsNullOrEmpty($DefaultTargetRole)) {
-                        $target = $Configdata.Allnodes.Where( {$_.Roles -contains 'Web'}).NodeName
+                    if ([string]::IsNullOrEmpty($Target)) {
+                        $target = $Configdata.Allnodes.Where( {$_.Roles -eq "WebServer_Default"}).NodeName
                         Start-DSCDeploy($target)
                     }
                 }
@@ -53,11 +60,6 @@ function Show-NPDConsole {
                 3 {
                     Write-host "Abort"; break
                 }
-            }
-
-           $ConfigData = Read-Host "What is the name of the configuration data file or enter for using the default [$($DefaultConfigData)]" 
-            if ([string]::IsNullOrEmpty($ConfigData)) {
-                $ConfigData = $DefaultConfigData
             }          
         }
         1 {
@@ -66,20 +68,7 @@ function Show-NPDConsole {
         2 {
             Publish-Modules
         }
-        3 {
-            
-            $DefaultConfig = "NO.PowershellDSC.default"
-
-            $Config = Read-Host "What is the name of the configuration or enter for using the default [$($DefaultConfig)]" 
-            if ([string]::IsNullOrEmpty($Config)) {
-                $Config = $DefaultConfig
-            }
-
-            $ConfigData = Read-Host "What is the name of the configuration data file or enter for using the default [$($DefaultConfigData)]" 
-            if ([string]::IsNullOrEmpty($ConfigData)) {
-                $ConfigData = $DefaultConfigData
-            }
-            
+        3 {         
             New-Configs -Configuration $Config -ConfigurationData $ConfigData -Path $DefaultConfigDir
             Show-NPDConsole
         }
