@@ -1,11 +1,14 @@
 using module "..\internal\NO.PowershellDSC.Framework.ConfigurationManager.psm1"
+[CmdletBinding()]
+param(
+)
 
 function Show-NPDConsole {
 [CmdletBinding()]
 param(
 )
-    $DefaultConfigData = "$($PWD)\data\NO.PowershellDSC.ConfigManagement.default.psd1"
-    $DefaultConfigDir = "$($PWD)\configs"
+    $DefaultConfigData = "$($PSScriptRoot)\..\data\NO.PowershellDSC.ConfigManagement.default.psd1"
+    $DefaultConfigDir = "$($PSScriptRoot)\configs"
     $DefaultConfig = "NO.PowershellDSC.default"
 
     if (([string]::IsNullOrEmpty($config) -and ([string]::IsNullOrEmpty($ConfigData)))) {
@@ -73,9 +76,10 @@ param(
         2 {
             Publish-Modules
         }
-        3 {         
+        3 { 
+            Write-Verbose -Message "Start Create"    
             #New-Configs -Configuration $Config -ConfigurationData $ConfigData -Path $DefaultConfigDir
-            New-Configs -ConfigurationName $Config -ConfigurationData $ConfigData
+            New-Configs -ConfigurationName $Config -ConfigurationData $ConfigData -verbose
 
             Show-NPDConsole
         }

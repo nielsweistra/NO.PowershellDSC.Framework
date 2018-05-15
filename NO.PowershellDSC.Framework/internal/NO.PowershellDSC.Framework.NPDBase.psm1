@@ -1,3 +1,6 @@
+[CmdletBinding()]
+param(
+)
 class NPDBase {
 
     hidden [string] $_Initiator = $null

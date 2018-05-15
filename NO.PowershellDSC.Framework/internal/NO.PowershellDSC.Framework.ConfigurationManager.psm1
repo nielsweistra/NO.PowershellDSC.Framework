@@ -1,5 +1,7 @@
 Using module ".\NO.PowershellDSC.Framework.NPDBase.psm1"
-
+[CmdletBinding()]
+param(
+)
 class ConfigurationManager : NPDBase {
     [Guid] hidden $ID = (New-Guid).Guid
     [string] $Configuration
